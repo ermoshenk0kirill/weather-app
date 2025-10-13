@@ -1,0 +1,12 @@
+body {
+  margin: 0px;
+  padding: 19px 25px;
+
+  @media (min-width: 768px) {
+    padding: 25px 40px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 63px 80px;
+  }
+}
