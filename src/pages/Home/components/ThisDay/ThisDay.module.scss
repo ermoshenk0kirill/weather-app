@@ -1,15 +1,28 @@
-@import '../../../../styles/variables.scss';
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "../../../../styles/variables.scss";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 .this_day {
   padding: 20px;
   max-width: 270px;
-  border: 1px solid red;
+  border: 1px solid rgba(180, 180, 180, 0.4); //red
   border-radius: 15px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 5px 25px -3px rgba(180, 180, 180, 0.4);
 
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
-  font-style: normal
+  font-style: normal;
+
+  @media (min-width: 375px) {
+    max-width: 325px;
+  }
+
+  @media (min-width: 425px) {
+    max-width: 375px;
+  }
+
+  @media (min-width: 1024px) {
+    min-width: 375px;
+  }
 }
 
 .top_block {
@@ -24,7 +37,11 @@
   color: $primary-color;
   font-size: 50px;
   font-weight: 600;
+}
 
+.this_city,
+.this_time {
+  color: rgba(147, 156, 176, 1);
 }
 
 .this_day_icon {

@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Weather } from "../types/types";
 
-// Тип для ответа, который мы сохраняем в Redux
 type WeatherResponse = {
   data: Weather;
   status: number;
@@ -20,11 +19,7 @@ type CurrentWeatherState = {
 
 // Начальное состояние
 const initialState: CurrentWeatherState = {
-  weather: {
-    main: {
-      temp: 0,
-    },
-  },
+  weather: {} as Weather,
   isLoading: false,
   response: {
     status: 0,

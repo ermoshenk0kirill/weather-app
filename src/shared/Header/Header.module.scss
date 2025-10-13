@@ -1,24 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Bartle&display=swap');
 
 .Header {
-  // Базовые стили для мобильных (320px+)
   display: flex;
   flex-direction:row;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
   margin-bottom: 20px;
+  overflow: hidden;
+  border: 1px solid gba(180, 180, 180, 0.4);
 
-  border: 1px solid red;
-  // min-height: 60px;
-
-  // Планшеты (768px+)
   @media (min-width: 768px) {
     gap: 25px;
     min-height: 70px;
   }
 
-  // Десктоп (1024px+)
   @media (min-width: 1024px) {
     gap: 30px;
     min-height: 80px;
@@ -34,8 +30,6 @@
     width: 36px;
     height: 36px;
   }
-  
-  // Десктоп (1024px+)
   @media (min-width: 1024px) {
     width: 40px;
     height: 40px;
@@ -52,37 +46,53 @@
     font-weight: 400;
     font-style: normal;
   }
-
-
   @media (min-width: 576px) {
     font-size: 17px;
   }
-
   @media (min-width: 768px) {
     font-size: 22px;
   }
-
   @media (min-width: 1024px) {
     font-size: 25px;
   }
-
+  @media (min-width: 1440px) {
+    margin-left: 85px;
+  }
 }
 
-// Обертка для Select
-.selectWrapper {
-  width: 100%;
-  width: 250px;
-  
-  @media (min-width: 576px) {
-    width: auto;
-    min-width: 220px;
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  background: #4793ff33;
+  border-radius: 15px;
+  padding: 4px 10px;
+  max-width: 200px;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  @media (min-width: 375px) {
+    max-width: 100px;
   }
-  
-  @media (min-width: 768px) {
-    min-width: 220px;
-  }
-  
+
   @media (min-width: 1024px) {
-    min-width: 400px;
+    max-width: 400px;
   }
+}
+
+.searchInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #0000009a;
+  padding: 6px 10px;
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.searchBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
 }

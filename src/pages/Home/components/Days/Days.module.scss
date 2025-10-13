@@ -1,56 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import '../../../../styles/variables.scss';
 .days {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-  
   display: flex;
   gap: 10px;
-  // border: 1px solid red;
+  max-width: 734px;
+  border-radius: 15px;
+  padding: 10px;
   box-shadow: $box-shadow, 
               inset 20px 0 20px -20px rgba(0,0,0,0.1),
               inset -20px 0 20px -20px rgba(0,0,0,0.1);
-
-  border-radius: 15px;
-
   overflow-x: auto;
   overflow-y: hidden;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 
-  padding: 10px;
+  @media (min-width: 1024px) {
+    margin-left: 50px;
+  }
+
+  @media(min-width: 1220px) {
+    max-width: 740px;
+  }
+
+  @media(min-width: 1440px) {
+    margin-left: 260px;
+  }
 
   &::-webkit-scrollbar {
     display: none;
-  }
-
-
-  @media(min-width: 1220px) {
-    max-width: 1040px;
   }
 }
 
 .card {
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;
+  width: 149px;
+  width: 120px;
   border-radius: 10px;
   padding: 10px;
-  width: 149px;
+  background-color: #4793FF33;
   transition: 300ms;
   cursor: pointer;
-  background-color: #4793FF33;
-
-  // margin-bottom: 10px;
-  // &:last-of-type {
-  //   margin-bottom: 0;
-  // }
-
-  flex: 0 0 auto;
-  width: 120px;
 
   .day_info {
+    padding-bottom: 12px;
     color: $base-color;
     font-size: 15px;
-    padding-bottom: 12px;
   }
 
   .img {
@@ -62,12 +59,12 @@
   }
 
   .temp_night {
-    color: $base-color;
     padding-bottom: 5px;
+    color: $base-color;
   }
 
   .info {
-    font-size: 13px;
     color: $base-color;
+    font-size: 13px;
   }
 }

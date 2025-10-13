@@ -1,8 +1,7 @@
-import React from 'react'
-import s from './Days.module.scss'
-import { Card } from './Card'
-
-type Props = {}
+import { useEffect, useState } from "react";
+import s from "./Days.module.scss";
+import { Card } from "./Card";
+import { WeatherService } from "../../../../services/WeatherService";
 
 export interface Day {
   day: string;
@@ -13,70 +12,113 @@ export interface Day {
   info: string;
 }
 
-export const Days = (props: Props) => {
-  const days: Day[] = [
-    {
-      day: 'Сегодня',
-      day_info: '28 авг',
-      icon_id: 'sun',
-      temp_day: '+18',
-      temp_night: '+15',
-      info: 'Облачно',
-    },
-    {
-      day: 'Завтра',
-      day_info: '29 авг',
-      icon_id: 'small_rain_sun',
-      temp_day: '+18',
-      temp_night: '+15',
-      info: 'небольшой дождь и солнце',
-    },
-    {
-      day: 'Ср',
-      day_info: '30 авг',
-      icon_id: 'small_rain',
-      temp_day: '+18',
-      temp_night: '+15',
-      info: 'небольшой дождь',
-    },
-    {
-      day: 'Чт',
-      day_info: '28 авг',
-      icon_id: 'mainly_cloudy',
-      temp_day: '+18',
-      temp_night: '+15',
-      info: 'Облачно',
-    },
-    {
-      day: 'Пт',
-      day_info: '28 авг',
-      icon_id: 'rain',
-      temp_day: '+18',
-      temp_night: '+15',
-      info: 'Облачно',
-    },
-    {
-      day: 'Сб',
-      day_info: '28 авг',
-      icon_id: 'sun',
-      temp_day: '+18',
-      temp_night: '+15',
-      info: 'Облачно',
-    },
-    {
-      day: 'Вс',
-      day_info: '28 авг',
-      icon_id: 'sun',
-      temp_day: '+18',
-      temp_night: '+15',
-      info: 'Облачно',
-    },
-  ]
+type Props = {
+  city: string;
+};
+
+export const Days = ({ city }: Props) => {
+  const [days, setDays] = useState<Day[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!city) {
+      setLoading(false);
+      return;
+    }
+
+    async function loadForecast() {
+      setLoading(true);
+      try {
+        const res = await WeatherService.getForecastWeather(city);
+        const list = res.data?.list ?? [];
+        const daily = getFiveDaysForecast(list);
+
+        const preparedDays: Day[] = daily.map((item: any) => {
+          const date = new Date(item.dt * 1000);
+          const weekday = date.toLocaleDateString("ru-RU", {
+            weekday: "short",
+          });
+          const dayInfo = date.toLocaleDateString("ru-RU", {
+            day: "numeric",
+            month: "short",
+          });
+
+          return {
+            day: capitalizeFirst(weekday),
+            day_info: dayInfo,
+            icon_id: mapWeatherIcon(item.weather[0].icon),
+            temp_day: `${Math.round(item.main.temp_max)}°`,
+            temp_night: `${Math.round(item.main.temp_min)}°`,
+            info: item.weather[0].description,
+          };
+        });
+
+        setDays(preparedDays);
+      } catch (e) {
+        console.error("Ошибка при загрузке прогноза:", e);
+        setDays([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadForecast();
+  }, [city]);
+
+  if (loading) {
+    return <div className={s.days}>Загрузка прогноза...</div>;
+  }
+
   return (
     <div className={s.days}>
       {days.map((day: Day) => (
-        <Card key ={day.day} day={day}/>
+        <Card key={day.day_info} day={day} />
       ))}
     </div>
-  )
+  );
+};
+
+// Берем прогноз 1 раз в днь в 12:00
+function getFiveDaysForecast(list: any[]) {
+  const dailyData: any[] = [];
+  const usedDates = new Set();
+
+  for (const item of list) {
+    const [date, time] = item.dt_txt.split(" ");
+    const hour = time.split(":")[0];
+    if (hour === "12" && !usedDates.has(date)) {
+      usedDates.add(date);
+      dailyData.push(item);
+    }
+  }
+
+  // если данных - берем ближайшие доступные 
+  if (dailyData.length < 5) {
+    const byDate: Record<string, any> = {};
+    for (const it of list) {
+      const date = it.dt_txt.split(" ")[0];
+      if (!byDate[date]) byDate[date] = it;
+    }
+    const fallback = Object.values(byDate).slice(0, 5);
+    return dailyData.concat(fallback).slice(0, 5);
+  }
+
+  return dailyData.slice(0, 5);
+}
+// форматируем текс
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// сопоставляем иконки из апи
+function mapWeatherIcon(openIcon: string): string {
+  if (openIcon.includes("01")) return "sun";
+  if (openIcon.includes("02")) return "small_rain_sun";
+  if (openIcon.includes("03") || openIcon.includes("04"))
+    return "mainly_cloudy";
+  if (openIcon.includes("09") || openIcon.includes("10")) return "rain";
+  if (openIcon.includes("11")) return "thunder";
+  if (openIcon.includes("13")) return "snow";
+  if (openIcon.includes("50")) return "fog";
+  return "sun";
 }

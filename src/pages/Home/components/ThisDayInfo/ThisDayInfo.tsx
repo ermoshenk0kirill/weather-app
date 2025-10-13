@@ -1,43 +1,53 @@
+
 import s from './ThisDayInfo.module.scss';
 import { ThisDayItem } from './ThisDayItem';
+import type { Weather } from '../../../../store/types/types';
 
-type Props = {}
 export interface Item {
-  icon_id: string
-  name: string
-  value: string
+  icon_id: string;
+  name: string;
+  value: string;
 }
 
-export const ThisDayInfo = (props: Props) => {
-  const items = [
+type Props = {
+  weather: Weather;
+};
+
+export const ThisDayInfo = ({ weather }: Props) => {
+  if (!weather || !weather.main || !weather.wind) {
+    return <div>Загрузка...</div>;
+  }
+
+  const items: Item[] = [
     {
       icon_id: 'temp',
       name: 'Температура',
-      value: '20° - ощущается как 17°',
+      value: `${Math.round(weather.main.temp)}° - ощущается как ${Math.round(weather.main.feels_like)}°`,
     },
     {
       icon_id: 'pressure',
       name: 'Давление',
-      value: '765 мм ртутного столба - нормальное',
+      value: `${weather.main.pressure} мм ртутного столба - ${weather.main.pressure >= 760 ? 'высокое' : weather.main.pressure < 740 ? 'низкое' : 'нормальное'}`,
     },
     {
-      icon_id: 'precipitation',
-      name: 'Осадки',
-      value: 'Без осадков',
+      icon_id: 'humidity',
+      name: 'Влажность',
+      value: `${weather.main.humidity}%`,
     },
     {
       icon_id: 'wind',
       name: 'Ветер',
-      value: '3 м/с юго-запад - легкий ветер',
+      value: `${weather.wind.speed} м/с, направление ${weather.wind.deg}°`,
     },
   ];
 
   return (
     <div className={s.this_day_info}>
       <div className={s.this_day_info_items}>
-        {items.map((item: Item) => (
+        {items.map((item) => (
           <ThisDayItem key={item.icon_id} item={item} />
         ))}
       </div>
     </div>
-  )}
+  );
+};

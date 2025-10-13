@@ -3,9 +3,9 @@ import currentWeatherSliceReducer from './slices/currentWeatherSlice';
 
 const rootReducer = combineReducers({
   currentWeatherSliceReducer,
-}); // сюда будут добавляться редьсеры
+});
 
-export const store = configureStore({ // глобавльное хранилище
+export const store = configureStore({
   reducer: rootReducer,
 });
 
