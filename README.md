@@ -17,7 +17,7 @@
 ## ⚙️ Технологии
 
 - **React + TypeScript**  
-- **Vite** (сборщик)  
+- **Vite**
 - **Redux Toolkit**  
 - **Axios**  
 - **SCSS Modules**  
